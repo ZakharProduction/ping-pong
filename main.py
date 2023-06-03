@@ -40,7 +40,7 @@ class Player(GameSprite):
             self.rect.y -= self.speed
 
         # если нажата клавиша вправо и физическая модель не ушла за правую границу игры
-        if keys[K_DOWN] and self.rect.y < width - 70:
+        if keys[K_DOWN] and self.rect.y < height - 150:
             self.rect.y += self.speed
 
     def update_l(self): 
@@ -52,7 +52,7 @@ class Player(GameSprite):
             self.rect.y -= self.speed
 
         # если нажата клавиша вправо и физическая модель не ушла за правую границу игры
-        if keys[K_s] and self.rect.y < width - 70:
+        if keys[K_s] and self.rect.y < height - 150:
             self.rect.y += self.speed
 
 # переменная окончания игры
@@ -61,7 +61,7 @@ finish = False  # когда True, то спрайты перестают раб
 game = True  # завершается при нажатии кнопки закрыть окно
 
 # размеры окна
-width = 700
+width = 600
 height = 500
 
 # создание окна
@@ -81,8 +81,8 @@ lose2 = font1.render('Player 2 Lose!', True, (180, 0 ,0))
 racket1 = Player('racket.png', 30, 200, 4, 50, 150)
 racket2 = Player('racket.png', 520, 200, 4, 50, 150)
 ball = Player('tenis_ball.png', 200, 200, 4, 50, 50)
-ball_x = 3
-ball_y = 3
+ball_x = 5
+ball_y = 5
 # игровой цикл
 while game:
     # обработка нажатия кнопки Закрыть окно
@@ -96,6 +96,24 @@ while game:
         racket2.update_r()
         ball.rect.x += ball_x
         ball.rect.y += ball_y
+
+        if sprite.collide_rect(racket1, ball):
+            ball_x *= -1
+
+        if sprite.collide_rect(racket2, ball):
+            ball_x *= -1
+
+        if ball.rect.y < 0 or ball.rect.y > height - 50:
+            ball_y *= -1
+
+        if ball.rect.x < 0:
+            finish = True
+            window.blit(lose1, (200, 200))
+
+        if ball.rect.x > width - 50:
+            finish = True
+            window.blit(lose1, (200, 200))
+
 
         racket1.reset()
         racket2.reset()
